@@ -1,0 +1,71 @@
+Author: rilysh
+Documented from: https://gurney.dev/posts/mod7/
+
+Windows 95/NT 4.0 CD key
+------------------------
+Windows 95 or NT CD key contains normally 10 numbers. Structure of a 10 numbers length
+CD key is like AAA-BCDEFFG where each of these characters represents their own respected
+values. After calculation, all these keys have to merge together where the sum will be
+calculated. Each individual value needs to be checked whether the generated key (sum)
+is valid or not.
+
+R = B + C + D + E + F + F + G
+
+1. Using the mod-7 algorithm the sum of R must need to be dividable with 7 which will
+result in the remainder of 0.
+2. E must need to be equal or lower than 8.
+3. G must not be 0 and must be lower than 8.
+
+This ends up this simple equation and now we need the value of AAA, which actually can
+be anything if it respects a few things.
+
+AAA value must not be 333, 444, 555, 666, 777, 888, or 999.
+
+To simplify, you can add another rule to our previous note where
+4. B must not be similar to C.
+Which says that value B is not equal to C (e.g. 3 must not be 3, (B)3 != (C)3)
+(Note, this only implies if you use BCD values as your AAA values. If you generate
+your own values last two notes aren't enforced.)
+
+An example key: 470-4706713
+
+Windows 95/NT Workstation OEM key
+---------------------------------
+Several OEM-based Windows 95 disks were published back in the '90s. But in all of them, the
+most popular was when NT came along. NT Workstation required OEM key instead typical
+CD key.
+
+An OEM key contains 20 characters (most of them are numbers except the keyword "OEM")
+and without the "OEM" keyword itself, it only boils down to 17 numbers. To simplify the
+work, we'll divide each of them into sections.
+
+The structure of the key is, AAAAA-OEM-BCCCCCC-DDDDD
+
+AAAAA - This section represents the date the key was printed on the copy of Windows.
+The first three AAA can be anything from 001 to 366 (*1*) and the last section,
+AA can be anything from 95 to 03. For Windows 95, this must be either 02 or 95 (*2*).
+
+OEM - In Windows 95 we've to type the whole "OEM" keyword, by following "-OEM-". NT
+Workstation doesn't require it and generally prints OEM where we only have to type the
+OEM key.
+
+BCCCCCC - This section where we've to apply the previous algorithm (as follows by the CD key)
+with some exceptions.
+
+R = B + C + C + C + C + C + C
+
+1. B must needs to be 0.
+2. C values must need to be dividable by 7 which will
+result in the remainder of 0.
+
+DDDDD - This section's values can be anything numeric. Windows doesn't check this portion.
+
+This ends up with a similar but slightly different approach. Note that the values in BCCCCCC
+not always have to be dividable by 7. Several reversed engineered sources showed that when
+validating the key Windows does some trick (increment the value with 1 which then reiterate
+for 6 times and then the last padding) until it becomes dividable by 7 and the remainder
+becomes 0.
+
+(*1*) - It was intended for leap-year, however, there is no confirmation news about this.
+(*2*) - A modified or beta version may have a different key pair. If you're unsure whether
+it will be 02 or 95, please try other keys, e.g. from 95 to 03, and see if it works.
